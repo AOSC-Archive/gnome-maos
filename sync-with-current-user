@@ -1,0 +1,7 @@
+#! /bin/bash
+for i in 'maos-caribou-button@icenowy.anthonos.org'
+do
+cp -r `pwd`/$i $HOME/.local/share/gnome-shell/extensions/
+gnome-shell-extension-tool -d $i
+gnome-shell-extension-tool -e $i
+done
