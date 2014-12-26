@@ -2,11 +2,13 @@
 const St = imports.gi.St;
 const Main = imports.ui.main;
 const Tweener = imports.ui.tweener;
+const Lang = imports.lang;
 
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 const Panel = imports.ui.panel;
 
+const Clutter = imports.gi.Clutter;
 
 let text, button;
 
@@ -42,15 +44,23 @@ const CaribouButton = new Lang.Class({
     _init: function() {
         this.parent(0.0, "Caribou");
 
-        let hbox = new St.BoxLayout({ style_class: 'panel-status-menu-box' });
         let label = new St.Label({ text: "Caribou",
                                    y_expand: true,
                                    y_align: Clutter.ActorAlign.CENTER });
-        hbox.add_child(label);
-        this.actor.add_actor(hbox);
+        this.actor.add_actor(label);
+        this.actor.label_actor = label;
 
-	    this._create(id);
-	}
+	
+    },
+
+    _onEvent: function(actor, event) {
+        this.parent(actor, event);
+
+        if (event.type() == Clutter.EventType.TOUCH_END ||
+            event.type() == Clutter.EventType.BUTTON_RELEASE)
+            _showHello();
+
+        return Clutter.EVENT_PROPAGATE;
     },
 
     destroy: function() {
@@ -58,13 +68,6 @@ const CaribouButton = new Lang.Class({
         this.parent();
     },
 
-    _redisplay: function(id) {
-	this._sections[id].removeAll();
-        this._create(id);
-    },
-
-    _create: function(id) {
-    }
 });
 
 function init() {
@@ -85,9 +88,8 @@ function enable() {
     button.connect('button-press-event', _showHello);
 */
     button = new CaribouButton;
-   
 //    Main.panel._rightBox.insert_child_at_index(button, 0);
-    Main.panel.addToStatusArea('caribou-toggle',button,1,left);
+    Main.panel.addToStatusArea('caribou-toggle',button,1,'left');
 }
 
 function disable() {
