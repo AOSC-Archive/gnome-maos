@@ -1,5 +1,7 @@
 
 const St = imports.gi.St;
+const Gio = imports.gi.Gio;
+const GLib = imports.gi.GLib;
 const Main = imports.ui.main;
 const Tweener = imports.ui.tweener;
 const Lang = imports.lang;
@@ -12,31 +14,32 @@ const Clutter = imports.gi.Clutter;
 
 let text, button;
 
-function _hideHello() {
-    Main.uiGroup.remove_actor(text);
-    text = null;
+const CaribouIface = '<node> \
+  <interface name="org.gnome.Caribou.Keyboard"> \
+    <method name="Show"> \
+      <arg type="u" name="arg_0" direction="in"> </arg> \
+    </method> \
+    <method name="Hide"> \
+      <arg type="u" name="arg_0" direction="in"> </arg> \
+    </method> \
+  </interface> \
+</node>';
+
+const CaribouInfo  = Gio.DBusInterfaceInfo.new_for_xml(CaribouIface);
+
+function Caribou() {
+    return new Gio.DBusProxy({ g_connection: Gio.DBus.session,
+                               g_interface_name: CaribouInfo.name,
+                               g_interface_info: CaribouInfo,
+                               g_name: 'org.gnome.Caribou.Keyboard',
+                               g_object_path: '/org/gnome/Caribou/Keyboard' });
 }
 
-function _showHello() {
-    if (!text) {
-        text = new St.Label({ style_class: 'helloworld-label', text: "Hello, world!" });
-        Main.uiGroup.add_actor(text);
-    }
+let _caribou;
 
-    text.opacity = 255;
-
-    let monitor = Main.layoutManager.primaryMonitor;
-
-    text.set_position(monitor.x + Math.floor(monitor.width / 2 - text.width / 2),
-                      monitor.y + Math.floor(monitor.height / 2 - text.height / 2));
-
-    Tweener.addTween(text,
-                     { opacity: 0,
-                       time: 2,
-                       transition: 'easeOutQuad',
-                       onComplete: _hideHello });
+function _toggleCaribou() {
+    _caribou.ShowRemote(0);
 }
-
 const CaribouButton = new Lang.Class({
     Name: 'CaribouButton.CaribouButton',
     Extends: PanelMenu.Button,
@@ -58,7 +61,7 @@ const CaribouButton = new Lang.Class({
 
         if (event.type() == Clutter.EventType.TOUCH_END ||
             event.type() == Clutter.EventType.BUTTON_RELEASE)
-            _showHello();
+            _toggleCaribou();
 
         return Clutter.EVENT_PROPAGATE;
     },
@@ -90,6 +93,15 @@ function enable() {
     button = new CaribouButton;
 //    Main.panel._rightBox.insert_child_at_index(button, 0);
     Main.panel.addToStatusArea('caribou-toggle',button,1,'left');
+    _caribou = new Caribou();
+    _caribou.init_async(GLib.PRIORITY_DEFAULT, null, Lang.bind(this, function(object, result) {
+            try {
+                this._dbusProxy.init_finish(result);
+            } catch(e) {
+                log('Error loading calendars: ' + e.message);
+                return;
+            }
+    }));
 }
 
 function disable() {
