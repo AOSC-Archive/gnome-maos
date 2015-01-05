@@ -67,6 +67,8 @@ const CandidateArea = new Lang.Class({
     setOrientation: function(orientation) {
         if (this._orientation == orientation)
             return;
+        // On touchscreen Horizontal is much better.
+	orientation = IBus.Orientation.HORIZONTAL;
 
         this._orientation = orientation;
 
