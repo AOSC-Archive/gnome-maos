@@ -7,3 +7,58 @@
     border-radius: 5px;
     padding: .5em;
 }
+
+/* IBus Candidate Popup */
+
+.maos-candidate-popup-content {
+    padding: 0.5em;
+    spacing: 0.3em;
+}
+
+.maos-candidate-index {
+    padding: 0 0.5em 0 0;
+    color: #cccccc;
+    font-size: 1.2em;
+}
+
+.maos-candidate-label {
+    font-size: 1.4em;
+}
+
+.maos-candidate-box {
+    padding: 0.3em 0.5em 0.3em 0.5em;
+}
+
+.maos-candidate-box:selected {
+    border-radius: 4px;
+    background-color: rgba(255,255,255,0.2);
+}
+
+.maos-candidate-box:hover {
+    border-radius: 4px;
+    background-color: rgba(255,255,255,0.1);
+}
+.maos-candidate-page-button-box {
+    height: 2em;
+    width: 80px;
+}
+
+.vertical .maos-candidate-page-button-box {
+    padding-top: 0.5em;
+}
+
+.horizontal .maos-candidate-page-button-box {
+    padding-left: 0.5em;
+}
+
+.maos-candidate-page-button-previous {
+    border-radius: 4px 0px 0px 4px;
+}
+
+.maos-candidate-page-button-next {
+    border-radius: 0px 4px 4px 0px;
+}
+
+.maos-candidate-page-button-icon {
+    icon-size: 1em;
+}

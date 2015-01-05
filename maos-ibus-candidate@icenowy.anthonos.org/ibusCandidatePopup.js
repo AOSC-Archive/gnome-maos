@@ -11,10 +11,10 @@ const Main = imports.ui.main;
 
 const MAX_CANDIDATES_PER_PAGE = 16;
 
-/*const DEFAULT_INDEX_LABELS_PLUGIN = [ '1', '2', '3', '4', '5', '6', '7', '8',
-                               '9', '0', 'a', 'b', 'c', 'd', 'e', 'f' ];*/
-const DEFAULT_INDEX_LABELS_PLUGIN = [ '甲', '乙', '丙', '丁', '戊', '己', '庚', '辛',
-                               '壬', '0', 'a', 'b', 'c', 'd', 'e', 'f' ];
+const DEFAULT_INDEX_LABELS_PLUGIN = [ '1', '2', '3', '4', '5', '6', '7', '8',
+                               '9', '0', 'a', 'b', 'c', 'd', 'e', 'f' ];
+/*const DEFAULT_INDEX_LABELS_PLUGIN = [ '甲', '乙', '丙', '丁', '戊', '己', '庚', '辛',
+                               '壬', '0', 'a', 'b', 'c', 'd', 'e', 'f' ];*/
 
 const CandidateArea = new Lang.Class({
     Name: 'CandidateArea',
@@ -24,11 +24,11 @@ const CandidateArea = new Lang.Class({
                                         visible: false });
         this._candidateBoxes = [];
         for (let i = 0; i < MAX_CANDIDATES_PER_PAGE; ++i) {
-            let box = new St.BoxLayout({ style_class: 'candidate-box',
+            let box = new St.BoxLayout({ style_class: 'maos-candidate-box',
                                          reactive: true,
                                          track_hover: true });
-            box._indexLabel = new St.Label({ style_class: 'candidate-index' });
-            box._candidateLabel = new St.Label({ style_class: 'candidate-label' });
+            box._indexLabel = new St.Label({ style_class: 'maos-candidate-index' });
+            box._candidateLabel = new St.Label({ style_class: 'maos-candidate-label' });
             box.add(box._indexLabel, { y_fill: false });
             box.add(box._candidateLabel, { y_fill: false });
             this._candidateBoxes.push(box);
@@ -94,8 +94,8 @@ const CandidateArea = new Lang.Class({
             if (!visible)
                 continue;
 
-            //box._indexLabel.text = ((indexes && indexes[i]) ? indexes[i] : DEFAULT_INDEX_LABELS[i]);
-            box._indexLabel.text = DEFAULT_INDEX_LABELS_PLUGIN[i];
+            box._indexLabel.text = ((indexes && indexes[i]) ? indexes[i] : DEFAULT_INDEX_LABELS_PLUGIN[i]);
+            //box._indexLabel.text = DEFAULT_INDEX_LABELS_PLUGIN[i];
             box._candidateLabel.text = candidates[i];
         }
 
