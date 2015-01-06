@@ -9,6 +9,8 @@ const St = imports.gi.St;
 const BoxPointer = imports.ui.boxpointer;
 const Main = imports.ui.main;
 
+const IBusManager = imports.misc.ibusManager;
+
 const MAX_CANDIDATES_PER_PAGE = 16;
 
 const DEFAULT_INDEX_LABELS_PLUGIN = [ '1', '2', '3', '4', '5', '6', '7', '8',
@@ -108,13 +110,23 @@ const CandidateArea = new Lang.Class({
     },
 
     updateButtons: function(wrapsAround, page, nPages) {
-        if (nPages < 2) {
-            this._buttonBox.hide();
-            return;
+        if(IBusManager.getIBusManager()._currentEngineName != "rime")
+        {
+            if (nPages < 2) {
+                this._buttonBox.hide();
+                return;
+            }
+            this._buttonBox.show();
+            this._previousButton.reactive = wrapsAround || page > 0;
+            this._nextButton.reactive = wrapsAround || page < nPages - 1;
         }
-        this._buttonBox.show();
-        this._previousButton.reactive = wrapsAround || page > 0;
-        this._nextButton.reactive = wrapsAround || page < nPages - 1;
+        else
+        {
+            //Rime Engine returns only the current page.
+            this._buttonBox.show();
+            this._previousButton.reactive = true;
+            this._nextButton.reactive = true;
+        }
     },
 });
 Signals.addSignalMethods(CandidateArea.prototype);
