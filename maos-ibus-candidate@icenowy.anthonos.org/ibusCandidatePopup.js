@@ -110,8 +110,7 @@ const CandidateArea = new Lang.Class({
     },
 
     updateButtons: function(wrapsAround, page, nPages) {
-        if(IBusManager.getIBusManager()._currentEngineName != "rime")
-        {
+        if(IBusManager.getIBusManager()._currentEngineName != "rime") {
             if (nPages < 2) {
                 this._buttonBox.hide();
                 return;
